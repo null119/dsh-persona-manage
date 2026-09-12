@@ -1,0 +1,9 @@
+# dsh-persona-manage bundle patch: inserts the dual-face plugin row into the
+# web profile roster. The node half (exports ".") serves the
+# /api/dsh-persona-manage route family that reads/writes the `system-prompt`
+# settings namespace (the deployment persona); the `dsh.client` declaration in
+# package.json makes the browser half (exports "./client", served at
+# /plugins/<id>/client.js) register the 设置 → Persona 提示词 page.
+- insert:
+    - id: persona-manage
+      name: 'dsh-persona-manage'
