@@ -20,8 +20,12 @@ DSH（DeepSeek Harness）Web GUI 的 Persona 提示词管理插件：在 **设�
   文件层、不触碰活树，空 store 事故链不会复发）。
 - **体积 / token 统计**：字符数、字节数、行数、估算 token（CJK ≈ 1 token/字符，
   其他 ≈ 1 token/4 字符）——即每次请求的固定成本。
-- **活注册表诊断**：保存后立即经 `systemPrompt.assemble()` 探测实际渲染的
-  `deployment:persona` 段，页面上显示 `✓ 已同步` / `✗ 未同步`（含段首 80 字符预览）。
+- **活注册表诊断（短重试 + 中性文案）**：保存后经 `systemPrompt.assemble()` 探测
+  实际渲染的 `deployment:persona` 段。宿主在保存/重置后约 1.2 秒窗口内自动重采样
+  （穿越 fiber 热重启窗口），响应带 `converged` 标记；客户端对未收敛样本自动复查
+  3 次（0.7/1.6/3 秒退避）。诊断只分两种口吻：`✓ 已生效`，或"正在应用中……（热
+  重启窗口，通常数秒内自行恢复）"——不再出现"服务不可见/未找到段"这类惊吓性
+  瞬态表述；复查超时才提示刷新。
 - **热应用**：多面写入（见[架构](#架构)），cordis 将配置 diff 解析为活 fiber 重载
   ——新 persona 对下一次组装的请求生效，无需重启宿主。
 - **重置 / 重新加载 / 放弃修改**：重置会移除托管覆盖（补丁块 + 预设行），让
@@ -39,7 +43,7 @@ DSH（DeepSeek Harness）Web GUI 的 Persona 提示词管理插件：在 **设�
   （`id: persona-manage`，`order: 26`，label「Persona 提示词」），内嵌客户端 lint
   镜像实时标错。
 
-### 保存时的写入面（v0.1.2）
+### 保存时的写入面（v0.1.3）
 
 dsh-system-prompt **不注册 settings 命名空间**（persona 只存在于组装行 config），
 因此 persona 需要同时落到多个面，缺一面就会出现"重启后丢失"或"会话拿不到"：
@@ -109,7 +113,7 @@ Persona prompt management plugin for the DSH (DeepSeek Harness) web GUI: edit th
 deployment-level system prompt directly on the **Settings → Persona 提示词**
 ("Persona Prompt") page — saved changes hot-apply, no host restart.
 
-- Version `0.1.2` · MIT · Node `^22.19.0 || >=24.0.0` · peer `react ^18.2.0`
+- Version `0.1.3` · MIT · Node `^22.19.0 || >=24.0.0` · peer `react ^18.2.0`
 
 ### Features
 
@@ -129,9 +133,14 @@ deployment-level system prompt directly on the **Settings → Persona 提示词*
   cannot recur.
 - **Size / token stats**: characters, bytes, lines, estimated tokens (CJK ≈
   1 token/char, other ≈ 1 token/4 chars) — the fixed cost paid on every request.
-- **Live-registry diagnostics**: after each save the host probes the actually
-  rendered `deployment:persona` section via `systemPrompt.assemble()` and the
-  page shows synced / out-of-sync state with an 80-char preview.
+- **Live-registry diagnostics (short retry + neutral wording)**: after each
+  save the host probes the actually rendered `deployment:persona` section via
+  `systemPrompt.assemble()`, re-sampling through the ~1.2 s fiber hot-restart
+  window; the response carries a `converged` marker, and the client
+  auto-rechecks unconverged samples three times (0.7/1.6/3 s backoff). The
+  page speaks two tones only — `✓ active` or "applying (hot-restart window,
+  usually settles within seconds)" — never the alarming transient states;
+  a refresh hint appears only after the rechecks run out.
 - **Hot apply**: a multi-surface write (see [Architecture](#architecture));
   cordis reconciles the config diff into a live fiber reload, so the next
   assembled request already uses the new persona.
