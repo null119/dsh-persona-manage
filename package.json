@@ -1,7 +1,7 @@
 {
   "name": "dsh-persona-manage",
   "description": "Persona prompt management for the DSH web GUI: a settings page (设置 → Persona 提示词) that edits the deployment-level system-prompt persona live — textarea editor, {{variable}} strict-template lint, token/size stats; save persists to the profile patch layer + agent preset and hot-applies with a settling live-registry probe (empty save restores the composition default).",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "type": "module",
   "engines": {
     "node": "^22.19.0 || >=24.0.0"

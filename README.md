@@ -5,7 +5,7 @@
 DSH（DeepSeek Harness）Web GUI 的 Persona 提示词管理插件：在 **设置 → Persona 提示词**
 页面直接编辑部署级系统提示词，保存即热生效（无需重启宿主）。
 
-- 版本：`0.1.1`（`package.json`）· 协议：MIT · Node `^22.19.0 || >=24.0.0` · peer `react ^18.2.0`
+- 版本：`0.1.5`（`package.json`）· 协议：MIT · Node `^22.19.0 || >=24.0.0` · peer `react ^18.2.0`
 
 ## 功能
 
@@ -44,7 +44,7 @@ DSH（DeepSeek Harness）Web GUI 的 Persona 提示词管理插件：在 **设�
   （`id: persona-manage`，`order: 26`，label「Persona 提示词」），内嵌客户端 lint
   镜像实时标错。
 
-### 保存路径：运行时 section（v0.1.4）
+### 保存路径：运行时 section（v0.1.5）
 
 persona 由本插件注册的**自有全局 prompt section**（`deployment:persona-manage`，与
 `dsh-system-prompt` 自带的 `deployment:persona` 同序位）渲染，其 `text` 是读取可变
@@ -122,7 +122,7 @@ Persona prompt management plugin for the DSH (DeepSeek Harness) web GUI: edit th
 deployment-level system prompt directly on the **Settings → Persona 提示词**
 ("Persona Prompt") page — saved changes hot-apply, no host restart.
 
-- Version `0.1.4` · MIT · Node `^22.19.0 || >=24.0.0` · peer `react ^18.2.0`
+- Version `0.1.5` · MIT · Node `^22.19.0 || >=24.0.0` · peer `react ^18.2.0`
 
 ### Features
 
